@@ -7,12 +7,7 @@ const userSchema = new mongoose.Schema({
    lname:String,
    email:String,
    phone:String,
-   profileImg:String,
    password:String,
-   bio:String,
-   report:Boolean,
-   reportReasons:[String],
-   blocked:Boolean 
 }); 
 
 const userData = mongoose.model(collection.USER_COLLECTION, userSchema);

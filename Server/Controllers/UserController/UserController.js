@@ -37,13 +37,12 @@ const userSignup = (async (req,res)=>{
   let userExist = await schema.userData.findOne({
     email:req.body.email
   })                    
-  if(userExist){
+  if(userExist){   
     console.log('sssss');
     res.send({message:'user Already exist',userAdded:false})   
   }else{
     const hashPassword = await bcrypt.hash(req.body.password,10)
-    req.body.password = hashPassword                                                      
-    console.log('ppppooo');         
+    req.body.password = hashPassword                                                              
     await schema.userData(req.body).save();  
     console.log('user added');
     
@@ -51,8 +50,33 @@ const userSignup = (async (req,res)=>{
   }       
 })  
 
+const getUsers = (async (req,res)=>{
+     console.log('>>>>');
+     const users = await schema.userData.find()
+     console.log(users);
+     res.send({usersData:users})   
+})
 
+const deleteUser = (async (req,res)=>{
+  const userID = req.params.id
+  await schema.userData.findByIdAndRemove({ _id : userID })
+  res.send({message:'succesfuly deleted'})   
+})
+
+const editProfile = (async (req,res)=>{
+  console.log(req.body,'sdsdsd');
+  await schema.userData.updateOne({ _id : req.body._id },{
+    $set:{
+      fname:req.body.fname,
+      lname:req.body.lname,
+      phone:req.body.phone,
+      email:req.body.email,
+    }
+  })
+  console.log('edit done');
+  res.send({message:'succesfuly profile edited'})   
+})
 
 module.exports  = {
-   userLogin,userSignup
+   userLogin,userSignup,getUsers,deleteUser,editProfile
 }
